@@ -23,7 +23,7 @@ class SearchBooks extends Component {
   }
 
   updateQuery = (query) => {
-    this.setState({query: query.trim()})
+    this.setState({query: query})
   }
 
   clearQuery = () => {
@@ -48,9 +48,11 @@ class SearchBooks extends Component {
     if (query) {
       const match = new RegExp(escapeRegExp(query), 'i')
       this.searchBooks()
+      if (books && books.length > 0) {
       showingBooks = books.filter((book) => match.test(book.title))
       showingBooks = this.mangleBooks(showingBooks)
       showingBooks.sort(sortBy('title'))
+      }
     }
 
 
