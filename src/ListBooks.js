@@ -18,11 +18,13 @@ class ListBooks extends Component {
         <h2 className="bookshelf-title">{booksType}</h2>
         <div className="bookshelf-books">
           <ol className="books-grid">
-            {books.sort(sortBy('title')).map((book) => (
+          {books.sort(sortBy('title')).map((book) => (
             <li key={book.id}>
               <div className="book">
                 <div className="book-top">
-                  <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks.thumbnail})` }}></div>
+                  {book.imageLinks && (
+                    <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks.thumbnail})` }}></div>
+                  )}
                   <div className="book-shelf-changer">
                     <select value={book.shelf} onChange={(event) => moveBookShelf(book, event.target.value)}>
                       <option value="move" disabled>Move to...</option>
@@ -37,7 +39,7 @@ class ListBooks extends Component {
                 <div className="book-authors"><ReactJoin separator="; ">{book.authors}</ReactJoin></div>
               </div>
             </li>
-            ))}
+          ))}
           </ol>
         </div>
       </div>

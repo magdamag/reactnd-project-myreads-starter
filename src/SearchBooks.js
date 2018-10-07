@@ -4,16 +4,23 @@ import PropTypes from 'prop-types';
 import escapeRegExp from 'escape-string-regexp'
 import sortBy from 'sort-by';
 import ListBooks from './ListBooks'
+import * as BooksAPI from './BooksAPI';
 
 class SearchBooks extends Component {
   static propTypes = {
-    books: PropTypes.array.isRequired,
     moveBookShelf: PropTypes.func.isRequired
   };
 
   state = {
+    books: [],
     query: ''
   };
+
+  searchBooks = () => {
+    BooksAPI.search(this.state.query).then((books) => {
+      this.setState({ books })
+    })
+  }
 
   updateQuery = (query) => {
     this.setState({query: query.trim()})
@@ -23,19 +30,29 @@ class SearchBooks extends Component {
     this.updateQuery('');
   };
 
+  mangleBooks = (books) => {
+    let books_mangled = []
+    books.map((book) => {
+      {!book.authors && (book.authors = ['Unknown'])}
+      {!book.shelf && (book.shelf = 'none')}
+      books_mangled.push(book)
+    })
+    return books_mangled
+  }
+
   render() {
-    const { books, moveBookShelf } = this.props
-    const { query } = this.state
+    const { moveBookShelf } = this.props
+    const { books, query } = this.state
 
     let showingBooks
     if (query) {
       const match = new RegExp(escapeRegExp(query), 'i')
+      this.searchBooks()
       showingBooks = books.filter((book) => match.test(book.title))
-    } else {
-      showingBooks = books
+      showingBooks = this.mangleBooks(showingBooks)
+      showingBooks.sort(sortBy('title'))
     }
 
-    showingBooks.sort(sortBy('title'))
 
     return(
       <div className="search-books">
@@ -50,7 +67,7 @@ class SearchBooks extends Component {
             />
           </div>
         </div>
-        {showingBooks.length !== books.length && showingBooks.length > 0 && (
+        {showingBooks && (
           <div className="search-books-results">
             <ListBooks books={showingBooks} booksType='Found the following' moveBookShelf={moveBookShelf}/>
           </div>
