@@ -33,8 +33,8 @@ class SearchBooks extends Component {
   mangleBooks = (books) => {
     let books_mangled = []
     books.map((book) => {
-      {!book.authors && (book.authors = ['Unknown'])}
-      {!book.shelf && (book.shelf = 'none')}
+      !book.authors && (book.authors = ['Unknown'])
+      !book.shelf && (book.shelf = 'none')
       books_mangled.push(book)
     })
     return books_mangled
