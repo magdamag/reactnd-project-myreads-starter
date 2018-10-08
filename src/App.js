@@ -43,6 +43,7 @@ class BooksApp extends Component {
         )}/>
         <Route path='/search' render={({ history }) => (
           <SearchBooks
+            books={books}
             moveBookShelf={this.moveBookShelf}
           />
         )}/>

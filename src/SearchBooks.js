@@ -8,7 +8,8 @@ import * as BooksAPI from './BooksAPI';
 
 class SearchBooks extends Component {
   static propTypes = {
-    moveBookShelf: PropTypes.func.isRequired
+    moveBookShelf: PropTypes.func.isRequired,
+    books: PropTypes.array.isRequired
   };
 
   state = {
@@ -37,6 +38,9 @@ class SearchBooks extends Component {
   mangleBooks = (books) => {
     let books_mangled = []
     books.map((book) => {
+      this.props.books.filter((bookstored) => {
+        book.id === bookstored.id && (book.shelf = bookstored.shelf)
+      })
       !book.authors && (book.authors = ['Unknown'])
       !book.shelf && (book.shelf = 'none')
       books_mangled.push(book)
