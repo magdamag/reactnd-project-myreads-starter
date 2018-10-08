@@ -10,16 +10,19 @@ class BooksApp extends Component {
     books: []
   }
 
+  // Fetch all books API
   getBooks = () => {
     BooksAPI.getAll().then((books) => {
       this.setState({ books })
     })
   }
 
+  // Fetch all books
   componentDidMount() {
     this.getBooks()
   }
 
+  // Move the book onto shelf
   moveBookShelf = (book, shelf) => {
     BooksAPI.update(book, shelf).then(() => {
       this.getBooks()
@@ -29,6 +32,7 @@ class BooksApp extends Component {
   render() {
     const { books } = this.state
 
+    // Either display list or search screen
     return (
       <div className="app">
         <Route exact path='/' render={() => (

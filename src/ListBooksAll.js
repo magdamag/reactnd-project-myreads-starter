@@ -16,9 +16,11 @@ class ListBooksAll extends Component {
   render() {
     const { books, moveBookShelf } = this.props;
 
-    let currentlyReading = books.filter((book) => book.shelf === 'currentlyReading');
-    let wantToRead = books.filter((book) => book.shelf === 'wantToRead');
-    let read = books.filter((book) => book.shelf === 'read');
+    const shelves = {
+      currentlyReading: ['Currently Reading', books.filter((book) => book.shelf === 'currentlyReading')],
+      wantToRead: ['Want to Read', books.filter((book) => book.shelf === 'wantToRead')],
+      read: ['Read', books.filter((book) => book.shelf === 'read')]
+    };
 
     return(
       <div className="list-books">
@@ -26,11 +28,13 @@ class ListBooksAll extends Component {
           <h1>MyReads</h1>
         </div>
         <div className="list-books-content">
-          <div>
-            <ListBooks books={currentlyReading} booksType='Currently Reading' moveBookShelf={moveBookShelf}/>
-            <ListBooks books={wantToRead} booksType='Want To Read' moveBookShelf={moveBookShelf}/>
-            <ListBooks books={read} booksType='Read' moveBookShelf={moveBookShelf}/>
-          </div>
+          { Object.keys(shelves).map((shelf) =>
+            <ListBooks key={shelf}
+              books={shelves[shelf][1]}
+              booksType={shelves[shelf][0]}
+              moveBookShelf={moveBookShelf}
+            />
+          )}
         </div>
         <div className="open-search">
           <Link to='/search'>Add a book</Link>
