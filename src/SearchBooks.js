@@ -17,8 +17,9 @@ class SearchBooks extends Component {
   };
 
   // Search for specific book API
-  searchBooks = () => {
-    BooksAPI.search(this.state.query).then((books) => {
+  searchBooks = (query) => {
+    console.log(query)
+    BooksAPI.search(query).then((books) => {
       this.setState({ books })
     })
   }
@@ -26,7 +27,7 @@ class SearchBooks extends Component {
   // Update query
   updateQuery = (query) => {
     this.setState({query: query})
-    this.searchBooks()
+    this.searchBooks(query)
     this.mangleBooks(this.state.books)
   }
 
@@ -38,7 +39,7 @@ class SearchBooks extends Component {
   // Fill in blanks for authors and shelf if not existing already
   mangleBooks = (books) => {
     let books_mangled = []
-    books && (
+    books && books.length > 0 && (
       books.map((book) => {
         this.props.books.filter((bookstored) => {
           book.id === bookstored.id && (book.shelf = bookstored.shelf)
@@ -69,11 +70,13 @@ class SearchBooks extends Component {
           </div>
         </div>
         {/* Show results if anything exists */}
-        {books && (
-          <div className="search-books-results">
-            <ListBooks books={books} booksType='Found the following' moveBookShelf={moveBookShelf}/>
-          </div>
+        <div className="search-books-results">
+        {books && books.length > 0 && (
+          <ListBooks books={books} booksType='Found the following' moveBookShelf={moveBookShelf}/>
+        ) || (
+          <span>None books found!</span>
         )}
+        </div>
       </div>
     )
   }
